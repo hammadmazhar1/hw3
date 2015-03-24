@@ -4,9 +4,19 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.ratings
     sort_order = params[:sort_by]
+    if sort_order.blank? == true
+      sort_order = session[:sort_by]
+    else
+      session[:sort_by] = sort_order
+    end
+    @prev_ratings = session[:ratings]
     @ratings = params[:ratings]
+    if (@prev_ratings != @ratings)
+      session[:ratings] = @ratings
+    end
     if @ratings.blank? == false
-        @movies = Movie.find_all_by_rating(@ratings.keys)
+        @movies = Movie.find_all_by_rating(@ratings.keys, :order =>sort_order)
+        
     else 
       @movies = Movie.all({:order=>sort_order})
     end
