@@ -2,7 +2,8 @@
 class MoviesController < ApplicationController
 
   def index
-    @movies = Movie.all
+    sort_order = params[:sort_by]
+    @movies = Movie.all({:order=>sort_order})
   end
 
   def show
